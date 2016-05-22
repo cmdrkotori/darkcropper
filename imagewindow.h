@@ -88,6 +88,8 @@ private:
     QString workingFilename;
     QString doubledFilename;
     NoiseLevel noise;
+    bool multiplying;
+
     ImageCropping transform;
     int glWidth;
     int glHeight;

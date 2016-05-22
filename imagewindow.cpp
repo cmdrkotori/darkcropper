@@ -56,6 +56,8 @@ ImageWindow::ImageWindow(QWidget *parent)
       done(true),
       displayScale(1.0),
       background(64, 64, QImage::Format_RGB32),
+      noise(NoNoise),
+      multiplying(false),
       opacity(0),
       doubler(NULL)
 {
@@ -179,9 +181,12 @@ void ImageWindow::paintEvent(QPaintEvent *ev)
     if (!source.isNull()) {
         QTransform oldTransform = p.transform();
         p.setWorldTransform(transform.transform(displayScale));
+        p.setCompositionMode(multiplying ? QPainter::CompositionMode_Multiply
+                                         : QPainter::CompositionMode_SourceOver);
         p.setRenderHint(QPainter::SmoothPixmapTransform);
         p.drawImage(drawPoint, source);
         p.setTransform(oldTransform);
+        p.setCompositionMode(QPainter::CompositionMode_SourceOver);
     }
 
     p.setWindow(QRect(0, 0, glWidth, glHeight));
@@ -315,7 +320,8 @@ void ImageWindow::actionNoise_triggered()
 
 void ImageWindow::actionMultiply_triggered()
 {
-
+    multiplying ^= true;
+    update();
 }
 
 void ImageWindow::process_finished(int exitCode)
