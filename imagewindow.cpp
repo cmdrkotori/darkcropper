@@ -316,6 +316,8 @@ void ImageWindow::actionNoise_triggered()
 {
     QVector<NoiseLevel> nextNoise = { SlightNoise, HeavyNoise, NoNoise };
     noise = nextNoise.at(noise);
+    updateFields();
+    update();
 }
 
 void ImageWindow::actionMultiply_triggered()
