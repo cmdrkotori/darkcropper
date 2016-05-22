@@ -7,11 +7,15 @@
     <x>0</x>
     <y>0</y>
     <width>512</width>
-    <height>621</height>
+    <height>655</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dark Cropper</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resources.qrc">
+    <normaloff>:/images/logo-48x48.png</normaloff>:/images/logo-48x48.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,0">
@@ -465,6 +469,8 @@
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

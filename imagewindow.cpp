@@ -60,6 +60,7 @@ ImageWindow::ImageWindow(QWidget *parent)
       doubler(NULL)
 {
     setWindowTitle("Dark Cropper Manipulation");
+    setWindowIcon(QIcon(":/images/logo-48x48.png"));
     setupBackground();
     setupActions();
 }
