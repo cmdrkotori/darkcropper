@@ -259,6 +259,26 @@ void MainWindow::updateActions()
     cropper->setMultiplyShortcut(ui->multiplyEdit->keySequence());
 }
 
+void MainWindow::importBatchFile(QString fileName)
+{
+    QFile f(fileName);
+    if (!f.open(QFile::ReadOnly | QFile::Text))
+        return;
+    QTextStream s(&f);
+    ui->fileList->addItems(s.readAll().split('\n', QString::SkipEmptyParts));
+}
+
+void MainWindow::exportBatchFile(QString fileName)
+{
+    QFile f(fileName);
+    if (!f.open(QFile::ReadWrite | QFile::Truncate | QFile::Text))
+        return;
+    QTextStream s(&f);
+    for (int i = 0; i < ui->fileList->count(); i++)
+        s << ui->fileList->item(i)->text() << '\n';
+    s.flush();
+}
+
 void MainWindow::on_singleFileBrowse_clicked()
 {
     QString m = QFileDialog::getOpenFileName(this, "Select File");
@@ -347,11 +367,7 @@ void MainWindow::on_singleFileSend_clicked()
 
 void MainWindow::on_batchFileSend_clicked()
 {
-    QFile f(ui->batchFileText->text());
-    if (!f.exists())
-        return;
-    QTextStream s(&f);
-    ui->fileList->addItems(s.readAll().split('\n'));
+    importBatchFile(ui->batchFileText->text());
 }
 
 void MainWindow::on_folderSend_clicked()
@@ -365,4 +381,18 @@ void MainWindow::on_folderSend_clicked()
         return;
     for (const QFileInfo &info : l)
         ui->fileList->addItem(info.absoluteFilePath());
+}
+
+void MainWindow::on_listImport_clicked()
+{
+    QString file = QFileDialog::getOpenFileName(this, "Open file");
+    if (!file.isEmpty())
+        importBatchFile(file);
+}
+
+void MainWindow::on_listExport_clicked()
+{
+    QString file = QFileDialog::getSaveFileName(this, "Save file");
+    if (!file.isEmpty())
+        exportBatchFile(file);
 }

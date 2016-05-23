@@ -41,19 +41,19 @@ private slots:
 
     void on_start_clicked();
     void on_stop_clicked();
-
-
     void on_singleFileSend_clicked();
-
     void on_batchFileSend_clicked();
-
     void on_folderSend_clicked();
+    void on_listImport_clicked();
+    void on_listExport_clicked();
 
 private:
     void populateScreens();
     void loadSettings();
     void saveSettings();
     void updateActions();
+    void importBatchFile(QString fileName);
+    void exportBatchFile(QString fileName);
 
     Ui::MainWindow *ui;
     ImageWindow *cropper;
