@@ -66,8 +66,8 @@ void MainWindow::cropper_export(QString sourceFilename,
     };
     auto placeToString = [](const QPointF &sz) {
         return QString("%1%2%3%4")
-                .arg(sz.x() < 0 ? "-" : "+").arg(sz.x())
-                .arg(sz.y() < 0 ? "-" : "+").arg(sz.y());
+                .arg(sz.x() < 0 ? "" : "+").arg(sz.x(), 0, 'f', 5)
+                .arg(sz.y() < 0 ? "" : "+").arg(sz.y(), 0, 'f', 5);
     };
     QColor light = QColor(ui->lightColor->text());
     if (!light.isValid())
@@ -79,8 +79,8 @@ void MainWindow::cropper_export(QString sourceFilename,
          << "+distort" << "SRT"
          << QString("%1,%2 %3 %4 %1,%2").arg(transform.image.width()/2)
                                         .arg(transform.image.height()/2)
-                                        .arg(transform.scaling)
-                                        .arg(transform.rotation)
+                                        .arg(transform.scaling, 0, 'f', 5)
+                                        .arg(transform.rotation, 0, 'f', 5)
          << "-write" << "mpr:src"
          << "+delete"
          << "-background" << "rgba(48,48,48)"
