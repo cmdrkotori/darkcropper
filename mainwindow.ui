@@ -483,6 +483,9 @@
           <property name="selectionMode">
            <enum>QAbstractItemView::ExtendedSelection</enum>
           </property>
+          <property name="selectionBehavior">
+           <enum>QAbstractItemView::SelectRows</enum>
+          </property>
          </widget>
         </item>
         <item>
@@ -521,13 +524,6 @@
          </size>
         </property>
        </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="show">
-        <property name="text">
-         <string>Show</string>
-        </property>
-       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="start">
