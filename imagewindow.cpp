@@ -302,7 +302,7 @@ void ImageWindow::actionDouble_triggered()
         "-o", doubledFilename
     };
     if (noise != NoNoise) {
-        args.append("noise_level");
+        args.append("--noise_level");
         args.append(QString::number((int)noise));
     }
     doubler->setArguments(args);
