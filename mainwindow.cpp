@@ -35,7 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(cropper, &ImageWindow::escape,
             this, &MainWindow::cropper_escape);
     connect(cropper, &ImageWindow::skip,
-            this, &MainWindow::cropper_nextFile);
+            this, &MainWindow::cropper_skip);
 
     populateScreens();
     loadSettings();
@@ -106,6 +106,7 @@ void MainWindow::cropper_export(QString sourceFilename,
     });
     p->start();
     cropper->showMessage("Beginning export");
+    fileList_chewTop();
     cropper_nextFile();
 }
 
@@ -114,15 +115,23 @@ void MainWindow::cropper_escape()
     cropper->hide();
 }
 
+void MainWindow::cropper_skip()
+{
+    fileList_chewTop();
+    cropper_nextFile();
+}
+
 void MainWindow::cropper_nextFile()
 {
     if (!cropper->isDone()) {
         cropper_show();
         return;
     }
-
-    if (!files.isEmpty()) {
-        cropper->setSource(files.takeFirst());
+    if (ui->fileList->count() > 0) {
+        auto item = ui->fileList->item(0);
+        if (!item)
+            return;
+        cropper->setSource(item->text());
         cropper_show();
     } else {
         cropper->hide();
@@ -153,6 +162,13 @@ void MainWindow::cropper_show()
         cropper->setEmulatedSize(placement.size());
     }
     cropwin->show();
+}
+
+void MainWindow::fileList_chewTop()
+{
+    auto item = ui->fileList->takeItem(0);
+    if (item)
+        delete item;
 }
 
 void MainWindow::process_finished(QString fileToRemove)
@@ -314,25 +330,6 @@ void MainWindow::on_multiplyReset_clicked()
 
 void MainWindow::on_start_clicked()
 {
-    if (ui->singleFile->isChecked()) {
-        files.append(ui->singleFileText->text());
-    } else if (ui->batchFile->isChecked()) {
-        QFile f(ui->batchFileText);
-        if (!f.exists())
-            return;
-        QTextStream s(&f);
-        files.append(s.readAll().split('\n'));
-    } else if (ui->folder->isChecked()) {
-        QString dirText = ui->folderText->text();
-        if (!dirText.endsWith("/"))
-            dirText += "/";
-        QDir d(dirText);
-        QFileInfoList l = d.entryInfoList({"*.png","*.jpg","*.jpeg"}, QDir::Files | QDir::NoDotAndDotDot);
-        if (l.isEmpty())
-            return;
-        for (const QFileInfo &info : l)
-            files.append(info.absoluteFilePath());
-    }
     cropper_nextFile();
 }
 
@@ -342,3 +339,30 @@ void MainWindow::on_stop_clicked()
     cropper->hide();
 }
 
+
+void MainWindow::on_singleFileSend_clicked()
+{
+    ui->fileList->addItem(ui->singleFileText->text());
+}
+
+void MainWindow::on_batchFileSend_clicked()
+{
+    QFile f(ui->batchFileText->text());
+    if (!f.exists())
+        return;
+    QTextStream s(&f);
+    ui->fileList->addItems(s.readAll().split('\n'));
+}
+
+void MainWindow::on_folderSend_clicked()
+{
+    QString dirText = ui->folderText->text();
+    if (!dirText.endsWith("/"))
+        dirText += "/";
+    QDir d(dirText);
+    QFileInfoList l = d.entryInfoList({"*.png","*.jpg","*.jpeg"}, QDir::Files | QDir::NoDotAndDotDot);
+    if (l.isEmpty())
+        return;
+    for (const QFileInfo &info : l)
+        ui->fileList->addItem(info.absoluteFilePath());
+}

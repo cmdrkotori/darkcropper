@@ -21,8 +21,10 @@ private slots:
                         QString workingFilename,
                         ImageCropping transform);
     void cropper_escape();
+    void cropper_skip();
     void cropper_nextFile();
     void cropper_show();
+    void fileList_chewTop();
     void process_finished(QString fileToRemove);
 
     void on_singleFileBrowse_clicked();
@@ -41,6 +43,12 @@ private slots:
     void on_stop_clicked();
 
 
+    void on_singleFileSend_clicked();
+
+    void on_batchFileSend_clicked();
+
+    void on_folderSend_clicked();
+
 private:
     void populateScreens();
     void loadSettings();
@@ -49,7 +57,6 @@ private:
 
     Ui::MainWindow *ui;
     ImageWindow *cropper;
-    QStringList files;
 };
 
 #endif // MAINWINDOW_H
