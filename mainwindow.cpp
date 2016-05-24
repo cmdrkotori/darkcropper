@@ -218,6 +218,11 @@ void MainWindow::loadSettings()
     LOAD_WIDGET(ui->doubleEdit, QKeySequence("D"), QKeySequence, KeySequence);
     LOAD_WIDGET(ui->noiseEdit, QKeySequence("N"), QKeySequence, KeySequence);
     LOAD_WIDGET(ui->multiplyEdit, QKeySequence("M"), QKeySequence, KeySequence);
+    LOAD_WIDGET(ui->fitWidthEdit, QKeySequence("W"), QKeySequence, KeySequence);
+    LOAD_WIDGET(ui->fitHeightEdit, QKeySequence("H"), QKeySequence, KeySequence);
+    LOAD_WIDGET(ui->resetZoomEdit, QKeySequence("1"), QKeySequence, KeySequence);
+    LOAD_WIDGET(ui->resetRotationEdit, QKeySequence("2"), QKeySequence, KeySequence);
+    LOAD_WIDGET(ui->resetLocationEdit, QKeySequence("3"), QKeySequence, KeySequence);
 
     LOAD_WIDGET_LIST(ui->fullscreenScreen, "1920x1080+0+0");
     LOAD_WIDGET_LIST(ui->windowedSize, "75%");
@@ -244,6 +249,10 @@ void MainWindow::saveSettings()
     SAVE_WIDGET(ui->doubleEdit, keySequence);
     SAVE_WIDGET(ui->noiseEdit, keySequence);
     SAVE_WIDGET(ui->multiplyEdit, keySequence);
+    SAVE_WIDGET(ui->fitWidthEdit, keySequence);
+    SAVE_WIDGET(ui->fitHeightEdit, keySequence);
+    SAVE_WIDGET(ui->resetZoomEdit, keySequence);
+    SAVE_WIDGET(ui->resetLocationEdit, keySequence);
 
     SAVE_WIDGET(ui->fullscreenScreen, currentText);
     SAVE_WIDGET(ui->windowedSize, currentText);
