@@ -50,6 +50,11 @@ public slots:
     void setDoubleShortcut(const QKeySequence &shortcut);
     void setNoiseShortcut(const QKeySequence &shortcut);
     void setMultiplyShortcut(const QKeySequence &shortcut);
+    void setWidthShortcut(const QKeySequence &shortcut);
+    void setHeightShortcut(const QKeySequence &shortcut);
+    void setResetZoomShortcut(const QKeySequence &shortcut);
+    void setResetRotationShortcut(const QKeySequence &shortcut);
+    void setResetLocationShortcut(const QKeySequence &shortcut);
     void setSource(const QString &filename);
     void setScaledSource(const QString &filename, int powerOf2);
     void showMessage(const QString &message);
@@ -68,6 +73,11 @@ private slots:
     void actionDouble_triggered();
     void actionNoise_triggered();
     void actionMultiply_triggered();
+    void actionWidth_triggered();
+    void actionHeight_triggered();
+    void actionResetZoom_triggered();
+    void actionResetRotation_triggered();
+    void actionResetLocation_triggered();
     void process_finished(int exitCode);
 
 private:
@@ -110,6 +120,11 @@ private:
     QAction *actionDouble;
     QAction *actionNoise;
     QAction *actionMultiply;
+    QAction *actionWidth;
+    QAction *actionHeight;
+    QAction *actionResetZoom;
+    QAction *actionResetRotation;
+    QAction *actionResetLocation;
 
     QProcess *doubler;
 };

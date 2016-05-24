@@ -138,6 +138,31 @@ void ImageWindow::setMultiplyShortcut(const QKeySequence &shortcut)
     actionMultiply->setShortcut(shortcut);
 }
 
+void ImageWindow::setWidthShortcut(const QKeySequence &shortcut)
+{
+    actionWidth->setShortcut(shortcut);
+}
+
+void ImageWindow::setHeightShortcut(const QKeySequence &shortcut)
+{
+    actionHeight->setShortcut(shortcut);
+}
+
+void ImageWindow::setResetZoomShortcut(const QKeySequence &shortcut)
+{
+    actionResetZoom->setShortcut(shortcut);
+}
+
+void ImageWindow::setResetRotationShortcut(const QKeySequence &shortcut)
+{
+    actionResetRotation->setShortcut(shortcut);
+}
+
+void ImageWindow::setResetLocationShortcut(const QKeySequence &shortcut)
+{
+    actionResetLocation->setShortcut(shortcut);
+}
+
 void ImageWindow::setSource(const QString &filename)
 {
     done = false;
@@ -326,6 +351,40 @@ void ImageWindow::actionMultiply_triggered()
     update();
 }
 
+void ImageWindow::actionWidth_triggered()
+{
+    if (source.isNull())
+        return;
+    transform.scaling = emulatedSize_.width() / (double)source.width();
+    update();
+}
+
+void ImageWindow::actionHeight_triggered()
+{
+    if (source.isNull())
+        return;
+    transform.scaling = emulatedSize_.height() / (double)source.height();
+    update();
+}
+
+void ImageWindow::actionResetZoom_triggered()
+{
+    transform.scaling = 1.0;
+    update();
+}
+
+void ImageWindow::actionResetRotation_triggered()
+{
+    transform.rotation = 0.0;
+    update();
+}
+
+void ImageWindow::actionResetLocation_triggered()
+{
+    transform.translation = {0,0};
+    update();
+}
+
 void ImageWindow::process_finished(int exitCode)
 {
     if (exitCode) {
@@ -370,6 +429,11 @@ void ImageWindow::setupActions()
     MAKE_ACTION(actionDouble, "Double");
     MAKE_ACTION(actionNoise, "Toggle Noise Factor");
     MAKE_ACTION(actionMultiply, "Toggle Multiply");
+    MAKE_ACTION(actionWidth, "Fit Width");
+    MAKE_ACTION(actionHeight, "Fit Height");
+    MAKE_ACTION(actionResetZoom, "Reset Zoom");
+    MAKE_ACTION(actionResetRotation, "Reset Rotation");
+    MAKE_ACTION(actionResetLocation, "Reset Location");
 
 #undef MAKE_ACTION
 }
