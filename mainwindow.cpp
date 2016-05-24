@@ -29,6 +29,16 @@ MainWindow::MainWindow(QWidget *parent) :
             cropper, &ImageWindow::setNoiseShortcut);
     connect(ui->multiplyEdit, &QKeySequenceEdit::keySequenceChanged,
             cropper, &ImageWindow::setMultiplyShortcut);
+    connect(ui->fitWidthEdit, &QKeySequenceEdit::keySequenceChanged,
+            cropper, &ImageWindow::setWidthShortcut);
+    connect(ui->fitHeightEdit, &QKeySequenceEdit::keySequenceChanged,
+            cropper, &ImageWindow::setHeightShortcut);
+    connect(ui->resetZoomEdit, &QKeySequenceEdit::keySequenceChanged,
+            cropper, &ImageWindow::setResetZoomShortcut);
+    connect(ui->resetRotationEdit, &QKeySequenceEdit::keySequenceChanged,
+            cropper, &ImageWindow::setResetRotationShortcut);
+    connect(ui->resetLocationEdit, &QKeySequenceEdit::keySequenceChanged,
+            cropper, &ImageWindow::setResetLocationShortcut);
 
     connect(cropper, &ImageWindow::exportFile,
             this, &MainWindow::cropper_export);
