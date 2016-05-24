@@ -269,6 +269,7 @@ void ImageWindow::mouseMoveEvent(QMouseEvent *event)
 {
     float ts = (event->modifiers() & Qt::ShiftModifier) ? 0.25 : 1;
     if (mouseCause == Qt::MiddleButton) {
+        // FIXME: move along angles when ctrl is pressed
         transform.scaling = mouseTransform.scaling + ts*(mouseLast.y() - event->localPos().y())/100;
     } else if (mouseCause == Qt::LeftButton) {
         transform.translation = mouseTransform.translation + ts*(event->localPos() - mouseLast)/displayScale;
