@@ -14,15 +14,21 @@ Prerequisites
 Controls
 ========
 
-*Left mouse button + drag*: move
-*Middle mouse button + up/down*: scale
-*Right moust button + left/right*: rotate
-*Return*: export current image
-*Escape*: go back to main dialog
-*S*: Skip this file
-*D*: Double source resolution (use when zooming >100%)
-*N*: Toggle perceived noise level (used during image doubling)
-*M*: Toggle multiply mode
+* **Left mouse button + drag**: move
+* **Middle mouse button + up/down**: scale
+* **Right moust button + left/right**: rotate
+* **Return**: export current image
+* **Q**: go back to main dialog
+* **S**: Skip this file
+* **D**: Double source resolution (use when zooming >100%)
+* **N**: Toggle perceived noise level (used during image doubling)
+* **M**: Toggle multiply mode
+* **W**: Fit to width
+* **H**: Fit to height
+* **1**: Reset scale
+* **2**: Reset rotation
+* **3**: Reset location
+
 
 Note that exporting a single image (or the last image) will return to the main
 dialog while imagemagick is still running.  Please wait a few seconds before
