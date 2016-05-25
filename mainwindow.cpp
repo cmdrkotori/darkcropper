@@ -86,6 +86,7 @@ void MainWindow::cropper_export(QString sourceFilename,
     QStringList args;
     args << workingFilename
          << "-colorspace" << "RGB"
+         << "-virtual-pixel" << "white"
          << "+distort" << "SRT"
          << QString("%1,%2 %3 %4 %1,%2").arg(transform.image.width()/2)
                                         .arg(transform.image.height()/2)
