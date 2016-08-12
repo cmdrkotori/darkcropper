@@ -64,10 +64,12 @@ void MainWindow::cropper_export(QString sourceFilename,
                                 ImageCropping transform)
 {
     QFileInfo info(sourceFilename);
-    QString outfile = QString("%1/%2_cropped.png")
+    QString appendage = "_cropped.png";
+    QString outfile = QString("%1/%2%3")
             .arg(ui->sameFolder->isChecked() ? info.absolutePath()
                                              : ui->otherFolderText->text())
-            .arg(info.completeBaseName());
+            .arg(info.completeBaseName().left(255 - appendage.length()))
+            .arg(appendage);
 
     auto sizeToString = [](const QSize &sz) {
         return QString("%1x%2")
