@@ -24,7 +24,7 @@
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
       </property>
-      <widget class="QWidget" name="">
+      <widget class="QWidget" name="layoutWidget">
        <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
         <item>
          <widget class="QGroupBox" name="groupBox">
@@ -310,8 +310,8 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-147</y>
-                <width>356</width>
+                <y>0</y>
+                <width>306</width>
                 <height>386</height>
                </rect>
               </property>
@@ -629,6 +629,20 @@
            <widget class="QPushButton" name="listExport">
             <property name="text">
              <string>Export</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="listRemove">
+            <property name="text">
+             <string>Remove</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="listClear">
+            <property name="text">
+             <string>Clear</string>
             </property>
            </widget>
           </item>

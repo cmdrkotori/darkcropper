@@ -47,6 +47,10 @@ private slots:
     void on_listImport_clicked();
     void on_listExport_clicked();
 
+    void on_listRemove_clicked();
+
+    void on_listClear_clicked();
+
 private:
     void populateScreens();
     void loadSettings();

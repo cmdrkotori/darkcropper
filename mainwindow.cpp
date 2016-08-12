@@ -418,3 +418,13 @@ void MainWindow::on_listExport_clicked()
     if (!file.isEmpty())
         exportBatchFile(file);
 }
+
+void MainWindow::on_listRemove_clicked()
+{
+    qDeleteAll(ui->fileList->selectedItems());
+}
+
+void MainWindow::on_listClear_clicked()
+{
+    ui->fileList->clear();
+}
