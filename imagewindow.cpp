@@ -224,6 +224,8 @@ void ImageWindow::paintEvent(QPaintEvent *ev)
         f.setPixelSize(size);
         p.setFont(f);
         QRect bounding = p.fontMetrics().boundingRect(message);
+        if (bounding.width() > glWidth * 0.80)
+            bounding.setWidth(glWidth * 0.80);
         QRectF textArea((glWidth - bounding.width() - 40) * weightX + 20,
                         (glHeight - bounding.height() - 40) * weightY + 20,
                         bounding.width(), bounding.height());
