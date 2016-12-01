@@ -58,6 +58,7 @@ ImageWindow::ImageWindow(QWidget *parent)
       background(64, 64, QImage::Format_RGB32),
       noise(NoNoise),
       multiplying(false),
+      rulesShown(false),
       opacity(0),
       doubler(NULL)
 {
@@ -163,6 +164,11 @@ void ImageWindow::setResetLocationShortcut(const QKeySequence &shortcut)
     actionResetLocation->setShortcut(shortcut);
 }
 
+void ImageWindow::setShowRulesShortcut(const QKeySequence &shortcut)
+{
+    actionShowRules->setShortcut(shortcut);
+}
+
 void ImageWindow::setSource(const QString &filename)
 {
     done = false;
@@ -244,6 +250,40 @@ void ImageWindow::paintEvent(QPaintEvent *ev)
     drawMessage(1.0, 15, 0.0, 0.0, transform.toDisplayString());
     drawMessage(1.0, 15, 0.5, 0.0, fileField);
     drawMessage(1.0, 15, 0.0, 1.0, noiseField);
+
+    if (rulesShown) {
+        qreal x2 = width() - 1;
+        qreal y2 = height() - 1;
+        QPainterPath path;
+
+        //rule of thirds
+        path.addRect(0, height()/3.0, x2, height()/3.0);
+        path.addRect(width()/3.0, 0, width()/3.0, y2);
+
+        //rule of diagonal
+        path.moveTo(0, 0);
+        path.lineTo(x2, x2);
+        path.moveTo(0, y2);
+        path.lineTo(y2, 0);
+
+        path.moveTo(x2, 0);
+        path.lineTo(x2-y2, y2);
+        path.moveTo(x2, y2);
+        path.lineTo(x2-y2, 0);
+
+        //rebatement
+        if (x2 > y2) {
+            path.addRect(0, 0, y2, y2);
+            path.addRect(x2-y2, 0, y2, y2);
+        } else {
+            path.addRect(0, 0, x2, x2);
+            path.addRect(0, y2-x2, x2, x2);
+        }
+
+        p.setBrush(QBrush());
+        p.setPen(QColor(0xba, 0xba, 0xba));
+        p.drawPath(path);
+    }
     p.end();
 }
 
@@ -388,6 +428,12 @@ void ImageWindow::actionResetLocation_triggered()
     update();
 }
 
+void ImageWindow::actionShowRules_triggered()
+{
+    rulesShown ^= true;
+    update();
+}
+
 void ImageWindow::process_finished(int exitCode)
 {
     if (exitCode) {
@@ -437,6 +483,7 @@ void ImageWindow::setupActions()
     MAKE_ACTION(actionResetZoom, "Reset Zoom");
     MAKE_ACTION(actionResetRotation, "Reset Rotation");
     MAKE_ACTION(actionResetLocation, "Reset Location");
+    MAKE_ACTION(actionShowRules, "Show Rules");
 
 #undef MAKE_ACTION
 }

@@ -312,7 +312,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>306</width>
-                <height>386</height>
+                <height>420</height>
                </rect>
               </property>
               <layout class="QFormLayout" name="formLayout_4">
@@ -576,6 +576,27 @@
                  </item>
                  <item>
                   <widget class="QToolButton" name="resetLocationReset">
+                   <property name="text">
+                    <string>&lt;</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="11" column="0">
+                <widget class="QLabel" name="label_13">
+                 <property name="text">
+                  <string>Show Rules</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="11" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_19">
+                 <item>
+                  <widget class="QKeySequenceEdit" name="showRulesEdit"/>
+                 </item>
+                 <item>
+                  <widget class="QToolButton" name="showRulesReset">
                    <property name="text">
                     <string>&lt;</string>
                    </property>

@@ -38,6 +38,7 @@ private slots:
     void on_doubleReset_clicked();
     void on_noiseReset_clicked();
     void on_multiplyReset_clicked();
+    void on_showRulesReset_clicked();
 
     void on_start_clicked();
     void on_stop_clicked();

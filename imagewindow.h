@@ -55,6 +55,7 @@ public slots:
     void setResetZoomShortcut(const QKeySequence &shortcut);
     void setResetRotationShortcut(const QKeySequence &shortcut);
     void setResetLocationShortcut(const QKeySequence &shortcut);
+    void setShowRulesShortcut(const QKeySequence &shortcut);
     void setSource(const QString &filename);
     void setScaledSource(const QString &filename, int powerOf2);
     void showMessage(const QString &message);
@@ -78,6 +79,7 @@ private slots:
     void actionResetZoom_triggered();
     void actionResetRotation_triggered();
     void actionResetLocation_triggered();
+    void actionShowRules_triggered();
     void process_finished(int exitCode);
 
 private:
@@ -99,6 +101,7 @@ private:
     QString doubledFilename;
     NoiseLevel noise;
     bool multiplying;
+    bool rulesShown;
 
     ImageCropping transform;
     int glWidth;
@@ -125,6 +128,7 @@ private:
     QAction *actionResetZoom;
     QAction *actionResetRotation;
     QAction *actionResetLocation;
+    QAction *actionShowRules;
 
     QProcess *doubler;
 };

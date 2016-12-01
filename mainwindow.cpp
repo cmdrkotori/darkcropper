@@ -236,6 +236,7 @@ void MainWindow::loadSettings()
     LOAD_WIDGET(ui->resetZoomEdit, QKeySequence("1"), QKeySequence, KeySequence);
     LOAD_WIDGET(ui->resetRotationEdit, QKeySequence("2"), QKeySequence, KeySequence);
     LOAD_WIDGET(ui->resetLocationEdit, QKeySequence("3"), QKeySequence, KeySequence);
+    LOAD_WIDGET(ui->showRulesEdit, QKeySequence("R"), QKeySequence, KeySequence);
 
     LOAD_WIDGET_LIST(ui->fullscreenScreen, "1920x1080+0+0");
     LOAD_WIDGET_LIST(ui->windowedSize, "75%");
@@ -266,6 +267,7 @@ void MainWindow::saveSettings()
     SAVE_WIDGET(ui->fitHeightEdit, keySequence);
     SAVE_WIDGET(ui->resetZoomEdit, keySequence);
     SAVE_WIDGET(ui->resetLocationEdit, keySequence);
+    SAVE_WIDGET(ui->showRulesEdit, keySequence);
 
     SAVE_WIDGET(ui->fullscreenScreen, currentText);
     SAVE_WIDGET(ui->windowedSize, currentText);
@@ -279,6 +281,7 @@ void MainWindow::updateActions()
     cropper->setDoubleShortcut(ui->doubleEdit->keySequence());
     cropper->setNoiseShortcut(ui->noiseEdit->keySequence());
     cropper->setMultiplyShortcut(ui->multiplyEdit->keySequence());
+    cropper->setShowRulesShortcut(ui->showRulesEdit->keySequence());
 }
 
 void MainWindow::importBatchFile(QString fileName)
@@ -368,6 +371,11 @@ void MainWindow::on_noiseReset_clicked()
 void MainWindow::on_multiplyReset_clicked()
 {
     ui->multiplyEdit->clear();
+}
+
+void MainWindow::on_showRulesReset_clicked()
+{
+    ui->showRulesEdit->clear();
 }
 
 void MainWindow::on_start_clicked()
