@@ -6,6 +6,10 @@
 #include <QFile>
 #include <QTextStream>
 #include <QDir>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMimeData>
+
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "imagewindow.h"
@@ -189,6 +193,25 @@ void MainWindow::process_finished(QString fileToRemove)
     cropper->showMessage("Export finished");
     if (!fileToRemove.isEmpty())
         QFile(fileToRemove).remove();
+}
+
+
+void MainWindow::dragEnterEvent(QDragEnterEvent *event)
+{
+    if (event->mimeData()->hasUrls())
+        event->acceptProposedAction();
+}
+
+void MainWindow::dropEvent(QDropEvent *event)
+{
+    if (event->source() == this)
+        return;
+
+    if (!event->mimeData()->hasUrls())
+        return;
+
+    for (const QUrl &u : event->mimeData()->urls())
+        ui->fileList->addItem(u.toLocalFile());
 }
 
 void MainWindow::populateScreens() {

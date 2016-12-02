@@ -52,6 +52,10 @@ private slots:
 
     void on_listClear_clicked();
 
+protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
+
 private:
     void populateScreens();
     void loadSettings();
