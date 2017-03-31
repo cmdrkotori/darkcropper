@@ -9,7 +9,11 @@ Prerequisites
 
 * Qt5 sdk
 * Imagemagick
-* waifu2x-converter-cpp with models at ~/.waifu2x/models
+* waifu2x-converter-cpp
+
+Models are typically installed at /usr/share/waifu2x-converter-cpp or similar.
+Alternatively, you may copy the models folder over from the w2x-c-cpp repo to
+~/.waifu2x/models.  The model location is detected at runtime.
 
 Controls
 ========
