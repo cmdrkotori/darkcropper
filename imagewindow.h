@@ -85,6 +85,7 @@ private slots:
 private:
     void setupBackground();
     void setupActions();
+    void setupModelFolder();
     void cleanupActions();
     void calculateDrawPoint();
     void updateFields();
@@ -96,6 +97,7 @@ private:
     qreal displayScale;
     QImage background;
     QImage source;
+    QString modelFolder;
     QString sourceFilename;
     QString workingFilename;
     QString doubledFilename;

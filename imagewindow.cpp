@@ -8,6 +8,8 @@
 #include <QPainter>
 #include <QTimer>
 #include <QFileInfo>
+#include <QDir>
+#include <QStandardPaths>
 #include <QUuid>
 #include <QProcess>
 #include <QProcessEnvironment>
@@ -66,6 +68,7 @@ ImageWindow::ImageWindow(QWidget *parent)
     setWindowIcon(QIcon(":/images/logo-48x48.png"));
     setupBackground();
     setupActions();
+    setupModelFolder();
 }
 
 ImageWindow::~ImageWindow()
@@ -365,7 +368,7 @@ void ImageWindow::actionDouble_triggered()
     QStringList args = {
         "--scale_ratio", "2.000",
         "-m", model,
-        "--model_dir", QProcessEnvironment::systemEnvironment().value("HOME", "")+"/.waifu2x/models",
+        "--model_dir", modelFolder,
         "-i", workingFilename,
         "-o", doubledFilename
     };
@@ -486,6 +489,17 @@ void ImageWindow::setupActions()
     MAKE_ACTION(actionShowRules, "Show Rules");
 
 #undef MAKE_ACTION
+}
+
+void ImageWindow::setupModelFolder()
+{
+    QString systemFolder("/usr/share/waifu2x-converter-cpp");
+    if (QDir(systemFolder).exists()) {
+        modelFolder = systemFolder;
+        return;
+    }
+
+    modelFolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.waifu2x/models";
 }
 
 void ImageWindow::cleanupActions()
