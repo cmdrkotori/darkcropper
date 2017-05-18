@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>734</width>
+    <width>742</width>
     <height>700</height>
    </rect>
   </property>
@@ -28,7 +28,7 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QWidget" name="layoutWidget">
-       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,1">
+       <layout class="QVBoxLayout" name="verticalLayout" stretch="0,0,0,1">
         <item>
          <widget class="QGroupBox" name="groupBox">
           <property name="title">
@@ -233,6 +233,85 @@
          </widget>
         </item>
         <item>
+         <widget class="QGroupBox" name="groupBox_5">
+          <property name="title">
+           <string>waifu2x</string>
+          </property>
+          <layout class="QFormLayout" name="formLayout_5">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_14">
+             <property name="text">
+              <string>Executable</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_15">
+             <property name="text">
+              <string>Model Dir</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_16">
+             <property name="text">
+              <string>Processor</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout_20">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLineEdit" name="waifu2xExecutable">
+               <property name="placeholderText">
+                <string>Leave blank for PATH</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="waifu2xExecutableBrowse">
+               <property name="text">
+                <string>...</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="1" column="1">
+            <layout class="QHBoxLayout" name="horizontalLayout_21">
+             <property name="spacing">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QLineEdit" name="waifu2xModelDir">
+               <property name="placeholderText">
+                <string>Leave blank for autodetect</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="waifu2xModelDirBrowse">
+               <property name="text">
+                <string>...</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </item>
+           <item row="2" column="1">
+            <widget class="QComboBox" name="waifu2xProcessor">
+             <property name="sizeAdjustPolicy">
+              <enum>QComboBox::AdjustToContents</enum>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <widget class="QGroupBox" name="groupBox_3">
           <property name="title">
            <string>Editor</string>
@@ -314,7 +393,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>306</width>
+                <width>314</width>
                 <height>420</height>
                </rect>
               </property>

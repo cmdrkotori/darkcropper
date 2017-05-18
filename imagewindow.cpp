@@ -58,6 +58,7 @@ ImageWindow::ImageWindow(QWidget *parent)
       done(true),
       displayScale(1.0),
       background(64, 64, QImage::Format_RGB32),
+      processor(-1),
       noise(NoNoise),
       multiplying(false),
       rulesShown(false),
@@ -68,7 +69,8 @@ ImageWindow::ImageWindow(QWidget *parent)
     setWindowIcon(QIcon(":/images/logo-48x48.png"));
     setupBackground();
     setupActions();
-    setupModelFolder();
+    setExecutable();
+    setModelDir();
 }
 
 ImageWindow::~ImageWindow()
@@ -88,9 +90,73 @@ void ImageWindow::setDisplayScale(qreal factor)
     displayScale = factor / devicePixelRatio();
 }
 
+bool ImageWindow::setExecutable(const QString &folder)
+{
+    QStringList candidates;
+    if (!folder.isEmpty())
+        candidates << folder + "/waifu2x-converter-cpp";
+    else
+        candidates << "./waifu2x-converter-cpp"
+                   << "/usr/local/bin/waifu2x-converter-cpp"
+                   << QStandardPaths::findExecutable("waifu2x-converter-cpp");
+
+    for (const QString &binary : candidates) {
+        executable = binary;
+        if (QFileInfo(executable).isExecutable())
+            return true;
+    }
+    executable.clear();
+    return false;
+}
+
+bool ImageWindow::setModelDir(const QString &folder)
+{
+    QStringList candidates;
+    if (!folder.isEmpty()) {
+        candidates << folder;
+    } else {
+        candidates << QFileInfo(executable).dir().path() + "/models_rgb"
+                   << QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.waifu2x/models_rgb"
+                   << QStandardPaths::writableLocation(QStandardPaths::HomeLocation) + "/.waifu2x"
+                   << "/usr/local/share/waifu2x-converter-cpp"
+                   << "/usr/share/waifu2x-converter-cpp";
+    }
+
+    for (const QString &baseFolder : candidates) {
+        modelFolder = baseFolder;
+        if (!modelFolder.isEmpty() && QDir(modelFolder).exists())
+            return true;
+    }
+    modelFolder.clear();
+    return false;
+}
+
+void ImageWindow::setProcessor(int index)
+{
+    processor = index;
+}
+
 void ImageWindow::setEmulatedSize(QSize size)
 {
     emulatedSize_ = size / displayScale;
+}
+
+QStringList ImageWindow::processors()
+{
+    QProcess p;
+    p.setProgram(executable);
+    p.setArguments({"--list-processor"});
+    p.start();
+    p.waitForFinished();
+    QString processOutput = QString::fromLocal8Bit(p.readAll());
+    QStringList lines = processOutput.split('\n', QString::SkipEmptyParts);
+    QStringList out;
+    for (QString &line : lines) {
+        line = line.trimmed();
+        if (line.count() && line.at(0).isNumber())
+            out << line;
+    }
+    return out;
 }
 
 QSize ImageWindow::emulatedSize()
@@ -355,9 +421,15 @@ void ImageWindow::actionSkip_triggered()
 
 void ImageWindow::actionDouble_triggered()
 {
-    showMessage("Doubling in progress. Please wait.");
-    if (doubler)
+    if (doubler) {
+        showMessage("Please wait for the previous job to finish.");
         return;
+    }
+    if (modelFolder.isEmpty() || executable.isEmpty()) {
+        showMessage("waifu2x not configured");
+        return;
+    }
+    showMessage("Doubling in progress. Please wait.");
 
     doubledFilename = QString("/dev/shm/darkcropper-%1.%2")
             .arg(QUuid::createUuid().toString())
@@ -372,12 +444,13 @@ void ImageWindow::actionDouble_triggered()
         "-i", workingFilename,
         "-o", doubledFilename
     };
-    if (noise != NoNoise) {
-        args.append("--noise_level");
-        args.append(QString::number((int)noise));
-    }
+    if (noise != NoNoise)
+        args << "--noise_level" << QString::number((int)noise);
+    if (processor >= 0)
+        args << "--processor" << QString::number(processor);
     doubler->setArguments(args);
-    doubler->setProgram("waifu2x-converter-cpp");
+    doubler->setProgram(executable);
+    qDebug() << executable << args;
     connect(doubler, SIGNAL(finished(int)),
             this, SLOT(process_finished(int)));
     doubler->start();
@@ -386,6 +459,8 @@ void ImageWindow::actionDouble_triggered()
 void ImageWindow::actionNoise_triggered()
 {
     QVector<NoiseLevel> nextNoise = { SlightNoise, HeavyNoise, NoNoise };
+    if (QFileInfo(modelFolder + "/noise3_model.json").exists())
+        nextNoise.insert(2, ExcessiveNoise);
     noise = nextNoise.at(noise);
     updateFields();
     update();
@@ -440,8 +515,9 @@ void ImageWindow::actionShowRules_triggered()
 void ImageWindow::process_finished(int exitCode)
 {
     if (exitCode) {
-        QString message = QString::fromUtf8(doubler->readAllStandardError());
-        QMessageBox::critical(NULL, "waifu2x errored out", message);
+        QString message = "The program said:\n"
+                + QString::fromUtf8(doubler->readAllStandardError());
+        QMessageBox::critical(NULL, "Doubler failed.", message);
         goto end;
     }
     if (workingFilename != sourceFilename)
@@ -491,17 +567,6 @@ void ImageWindow::setupActions()
 #undef MAKE_ACTION
 }
 
-void ImageWindow::setupModelFolder()
-{
-    QString systemFolder("/usr/share/waifu2x-converter-cpp");
-    if (QDir(systemFolder).exists()) {
-        modelFolder = systemFolder;
-        return;
-    }
-
-    modelFolder = QStandardPaths::writableLocation(QStandardPaths::HomeLocation)+"/.waifu2x/models";
-}
-
 void ImageWindow::cleanupActions()
 {
     delete actionExport;
@@ -521,7 +586,7 @@ void ImageWindow::calculateDrawPoint()
 void ImageWindow::updateFields()
 {
     fileField = QFileInfo(sourceFilename).fileName();
-    noiseField = QStringList({"0: No noise", "1: Slight noise", "2: Heavy noise"}).at(noise);
+    noiseField = QStringList({"0: No noise", "1: Slight noise", "2: Heavy noise", "3: Excessive noise"}).at(noise);
 }
 
 void ImageWindow::removeWorkingCopy()

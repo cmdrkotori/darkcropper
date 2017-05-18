@@ -52,6 +52,12 @@ private slots:
 
     void on_listClear_clicked();
 
+    void on_waifu2xExecutableBrowse_clicked();
+
+    void on_waifu2xModelDirBrowse_clicked();
+
+    void on_waifu2xProcessor_currentIndexChanged(int index);
+
 protected:
     void dragEnterEvent(QDragEnterEvent *event);
     void dropEvent(QDropEvent *event);
@@ -60,6 +66,7 @@ private:
     void populateScreens();
     void loadSettings();
     void saveSettings();
+    void checkFolders();
     void updateActions();
     void importBatchFile(QString fileName);
     void exportBatchFile(QString fileName);

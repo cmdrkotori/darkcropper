@@ -1,4 +1,5 @@
 #include <QApplication>
+#include <QLineEdit>
 #include <QDesktopWidget>
 #include <QSettings>
 #include <QFileDialog>
@@ -21,6 +22,10 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 
     cropper = new ImageWindow();
+    connect(ui->waifu2xExecutable, &QLineEdit::textEdited,
+            this, &MainWindow::checkFolders);
+    connect(ui->waifu2xModelDir, &QLineEdit::textEdited,
+            this, &MainWindow::checkFolders);
     connect(ui->exportEdit, &QKeySequenceEdit::keySequenceChanged,
             cropper, &ImageWindow::setExportShortcut);
     connect(ui->escapeEdit, &QKeySequenceEdit::keySequenceChanged,
@@ -248,6 +253,10 @@ void MainWindow::loadSettings()
     LOAD_WIDGET(ui->sameFolder, true, bool, Checked);
     LOAD_WIDGET(ui->fullscreen, true, bool, Checked);
     LOAD_WIDGET(ui->windowed, false, bool, Checked);
+    LOAD_WIDGET(ui->waifu2xExecutable, QString(), QString, Text);
+    LOAD_WIDGET(ui->waifu2xModelDir, QString(), QString, Text);
+    checkFolders();
+    LOAD_WIDGET(ui->waifu2xProcessor, 0, int, CurrentIndex);
     LOAD_WIDGET(ui->exportEdit, QKeySequence("Return"), QKeySequence, KeySequence);
     LOAD_WIDGET(ui->escapeEdit, QKeySequence("Q"), QKeySequence, KeySequence);
     LOAD_WIDGET(ui->skipEdit, QKeySequence("S"), QKeySequence, KeySequence);
@@ -280,6 +289,9 @@ void MainWindow::saveSettings()
     SAVE_WIDGET(ui->sameFolder, isChecked);
     SAVE_WIDGET(ui->fullscreen, isChecked);
     SAVE_WIDGET(ui->windowed, isChecked);
+    SAVE_WIDGET(ui->waifu2xExecutable, text);
+    SAVE_WIDGET(ui->waifu2xModelDir, text);
+    SAVE_WIDGET(ui->waifu2xProcessor, currentIndex);
     SAVE_WIDGET(ui->exportEdit, keySequence);
     SAVE_WIDGET(ui->escapeEdit, keySequence);
     SAVE_WIDGET(ui->skipEdit, keySequence);
@@ -294,6 +306,24 @@ void MainWindow::saveSettings()
 
     SAVE_WIDGET(ui->fullscreenScreen, currentText);
     SAVE_WIDGET(ui->windowedSize, currentText);
+}
+
+void MainWindow::checkFolders()
+{
+    bool exec = cropper->setExecutable(ui->waifu2xExecutable->text());
+    bool models = cropper->setModelDir(ui->waifu2xModelDir->text());
+    static const char badStyle[] = "background: #ba8a8a; color: black;";
+    ui->waifu2xExecutable->setStyleSheet(exec ? "" : badStyle);
+    ui->waifu2xModelDir->setStyleSheet(models ? "" : badStyle);
+    QStringList processors;
+    if (exec && models)
+        processors << "Autodetect" << cropper->processors();
+    else
+        processors << "Executable or OpenCL not found";
+    int oldIndex = ui->waifu2xProcessor->currentIndex();
+    ui->waifu2xProcessor->clear();
+    ui->waifu2xProcessor->addItems(processors);
+    ui->waifu2xProcessor->setCurrentIndex(oldIndex);
 }
 
 void MainWindow::updateActions()
@@ -458,4 +488,27 @@ void MainWindow::on_listRemove_clicked()
 void MainWindow::on_listClear_clicked()
 {
     ui->fileList->clear();
+}
+
+void MainWindow::on_waifu2xExecutableBrowse_clicked()
+{
+    QString m = QFileDialog::getExistingDirectory(this, "Select Folder");
+    if (m.isNull())
+        return;
+    ui->waifu2xExecutable->setText(m);
+    checkFolders();
+}
+
+void MainWindow::on_waifu2xModelDirBrowse_clicked()
+{
+    QString m = QFileDialog::getExistingDirectory(this, "Select Folder");
+    if (m.isNull())
+        return;
+    ui->waifu2xModelDir->setText(m);
+    checkFolders();
+}
+
+void MainWindow::on_waifu2xProcessor_currentIndexChanged(int index)
+{
+    cropper->setProcessor(index - 1);
 }

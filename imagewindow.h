@@ -25,13 +25,18 @@ public:
 
 class ImageWindow : public QWidget {
     Q_OBJECT
-    enum NoiseLevel { NoNoise, SlightNoise, HeavyNoise };
+    enum NoiseLevel { NoNoise, SlightNoise, HeavyNoise, ExcessiveNoise };
 public:
     ImageWindow(QWidget *parent = 0);
     ~ImageWindow();
     ImageCropping getTransform();
     void setDisplayScale(qreal factor);
+    bool setExecutable(const QString &folder = QString());
+    bool setModelDir(const QString &folder = QString());
+    void setProcessor(int index);
     void setEmulatedSize(QSize size);
+
+    QStringList processors();
     QSize emulatedSize();
     bool isDone();
     void stop();
@@ -85,7 +90,6 @@ private slots:
 private:
     void setupBackground();
     void setupActions();
-    void setupModelFolder();
     void cleanupActions();
     void calculateDrawPoint();
     void updateFields();
@@ -97,7 +101,9 @@ private:
     qreal displayScale;
     QImage background;
     QImage source;
+    QString executable;
     QString modelFolder;
+    int processor;
     QString sourceFilename;
     QString workingFilename;
     QString doubledFilename;
