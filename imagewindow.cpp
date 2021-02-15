@@ -6,6 +6,7 @@
 #include <QMessageBox>
 #include <QAction>
 #include <QPainter>
+#include <QPainterPath>
 #include <QTimer>
 #include <QFileInfo>
 #include <QDir>
@@ -436,16 +437,16 @@ void ImageWindow::actionDouble_triggered()
             .arg(QFileInfo(workingFilename).suffix());
 
     doubler = new QProcess();
-    QString model = noise != NoNoise ? "noise_scale" : "scale";
+    QString model = noise != NoNoise ? "noise-scale" : "scale";
     QStringList args = {
-        "--scale_ratio", "2.000",
+        "--scale-ratio", "2.000",
         "-m", model,
-        "--model_dir", modelFolder,
+        "--model-dir", modelFolder,
         "-i", workingFilename,
         "-o", doubledFilename
     };
     if (noise != NoNoise)
-        args << "--noise_level" << QString::number((int)noise);
+        args << "--noise-level" << QString::number((int)noise);
     if (processor >= 0)
         args << "--processor" << QString::number(processor);
     doubler->setArguments(args);
